@@ -14,8 +14,8 @@ func TestConsumeInOrder(t *testing.T) {
 	if len(matched) != 2 || matched[0] != "light" || matched[1] != "heavy" {
 		t.Fatalf("吃掉的步骤不对：%v", matched)
 	}
-	if buffer.Len(200) != 1 {
-		t.Fatalf("吃掉两个键之后应该剩一个：%d", buffer.Len(200))
+	if buffer.Buffered(200) != 1 {
+		t.Fatalf("吃掉两个键之后应该剩一个：%d", buffer.Buffered(200))
 	}
 }
 
@@ -27,17 +27,17 @@ func TestConsumeFailsWithoutSteps(t *testing.T) {
 	}
 }
 
-func TestLenCountsFreshPresses(t *testing.T) {
+func TestBufferedCountsFreshPresses(t *testing.T) {
 	buffer := NewBuffer(WindowMs)
 	buffer.Press("light", 1000)
 	buffer.Press("heavy", 1050)
-	if buffer.Len(1100) != 2 {
-		t.Fatalf("窗口内的按键应该都还在：%d", buffer.Len(1100))
+	if buffer.Buffered(1100) != 2 {
+		t.Fatalf("窗口内的按键应该都还在：%d", buffer.Buffered(1100))
 	}
 }
 
 func TestConstants(t *testing.T) {
-	if WindowMs != 300 || MaxPending != 4 {
-		t.Fatal("常量被改了")
+	if WindowMs != 300 || Capacity != 64 {
+		t.Fatal("输入缓冲常量被改了")
 	}
 }
